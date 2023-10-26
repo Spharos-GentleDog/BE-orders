@@ -3,11 +3,12 @@ package egenius.orders.domain.payment.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
 @Entity
-@Builder(toBuilder = true)
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Payment {
@@ -19,57 +20,24 @@ public class Payment {
     @Column(name = "payment_key")
     private String paymentKey;
 
-    @Column(name = "type")
-    private String type;
+    @Column(name = "payment_method")
+    private PaymentMethod paymentMethod;
 
-    @Column(name = "order_id")
-    private String orderId;
+    @Column(name = "payment_status")
+    private PaymentStatus paymentStatus;
 
-    @Column(name = "order_name")
-    private String orderName;
+    @Column(name = "payment_total_amount")
+    private Integer paymentTotalAmount;
 
-    @Column(name = "m_id")
-    private String mId;
-
-    @Column(name = "method")
-    private String method;
-
-    @Column(name = "total_amount")
-    private Integer totalAmount;
-
-    @Column(name = "balance_amount")
-    private Integer balanceAmount;
-
-    @Column(name = "status")
-    private String status;
-
-    @Column(name = "requested_at") //todo: datetime으로 바꾸기
-    private String requestedAt;
+    @Column(name = "requested_at")
+    private LocalDateTime requestedAt;
 
     @Column(name = "approved_at")
-    private String approvedAt;
+    private LocalDateTime approvedAt;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cancels_id", referencedColumnName = "id")
-    private Cancels cancels;
-
-    @Column(name = "isPartialCancelable")
-    private Boolean isPartialCancelable;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "card", referencedColumnName = "id")
-    private Card card;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "virtual_account", referencedColumnName = "id")
-    private VirtualAccount virtualAccount;
+    @Column(name = "is_partial")
+    private Boolean isPartial;
 
     @Column(name = "receipt_url")
     private String receipt_url; // receipt의 url과 매핑됨
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "easy_pay", referencedColumnName = "id")
-    private EasyPay easyPay;
-
-
 }

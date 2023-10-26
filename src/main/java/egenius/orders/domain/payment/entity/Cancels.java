@@ -14,17 +14,15 @@ public class Cancels {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "cancelReason")
-    private String cancelReason;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "payment_id", referencedColumnName = "id")
+    private Payment payment;
 
-    @Column(name = "canceledAt")
+    @Column(name = "canceled_at")
     private String canceledAt;
 
     @Column(name = "cancel_amount")
     private Integer cancelAmount;
-
-    @Column(name = "refundable_amount")
-    private Integer refundableAmount;
 
     @Column(name = "transaction_key")
     private String transactionKey;

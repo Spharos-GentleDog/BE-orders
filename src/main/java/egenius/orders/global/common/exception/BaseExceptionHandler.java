@@ -1,30 +1,36 @@
 package egenius.orders.global.common.exception;
 
 
-import egenius.orders.global.common.BaseResponse.BaseResponse;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
+import egenius.orders.global.common.response.BaseResponse;
+import egenius.orders.global.common.response.BaseResponseStatus;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
+@Slf4j
 public class BaseExceptionHandler {
     /**
      * 발생한 예외 처리
      */
 
-    @ExceptionHandler
-    protected ResponseEntity<?> ApiError(BaseException e) {
-        // responseEntity에 error객체를 그대로 넘겨주면 상속받고있는 runtimeException의 필드를 모두 넘겨주게 된다
-        // 따라서 내가 원하는 필드값만 가져오도록 BaseResponse를 생성한 후, 이를 값으로 넘겨준다
-        BaseResponse response = new BaseResponse(e);
-        return new ResponseEntity<>(response, e.getHttpStatus());
+    // 등록된 에러
+    @ExceptionHandler(BaseException.class)
+    protected ResponseEntity<?> BaseError(BaseException e) {
+        // BaseException의 BaseResponseStatus를 가져와서 BaseResponse를 만들어서 return해줌
+        BaseResponse response = new BaseResponse(e.getStatus());
+        log.info("BaseException: " + e.getStatus().getMessage());
+        return new ResponseEntity<>(response, response.httpStatus());
     }
 
-    @ExceptionHandler
+    // 런타임 에러
+    @ExceptionHandler(RuntimeException.class)
     protected ResponseEntity<?> RuntimeError(RuntimeException e) {
-        BaseResponse response = new BaseResponse(e);
-        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        // BaseException으로 잡히지 않는 RuntimeError는, INTERNAL_SEBVER_ERROR로 처리해줌
+        BaseResponse response = new BaseResponse(BaseResponseStatus.INTERNAL_SERVER_ERROR);
+        log.info("RuntimeException: " + e.getMessage()+", "+e.getLocalizedMessage());
+        return new ResponseEntity<>(response, response.httpStatus());
     }
+
 }

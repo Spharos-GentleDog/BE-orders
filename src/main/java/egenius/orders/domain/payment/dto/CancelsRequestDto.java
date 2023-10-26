@@ -1,5 +1,10 @@
 package egenius.orders.domain.payment.dto;
 
+import egenius.orders.domain.payment.entity.Payment;
+import jakarta.persistence.Column;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,11 +14,14 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CancelsDto {
-    private Integer cancelAmount;
-    private String cancelReason;
-    private Integer refundableAmount;
+public class CancelsRequestDto {
+    private String payment_id;
+
     private String canceledAt;
+
+    private Integer cancelAmount;
+
     private String transactionKey;
+
     private String receiptKey;
 }

@@ -1,8 +1,6 @@
 package egenius.orders.domain.payment.application;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import egenius.orders.domain.payment.dto.*;
-import egenius.orders.domain.payment.webdto.CardPayRequestDto;
+import egenius.orders.domain.payment.dto.PaymentRequestDto;
 import egenius.orders.global.common.exception.BaseException;
 
 public interface PaymentService {
@@ -10,9 +8,13 @@ public interface PaymentService {
     /**
      * payment
      *
-     * 1. 카드결제요청
+     * 1. 결제 요청
+     * 2. 결제 중복 체크
      */
 
-    // 1. 카드결제
-    PaymentDto cardPay(CardPayRequestDto requestDto) throws JsonProcessingException, BaseException;
+    // 1. 결제 요청
+    void paymentRequest(PaymentRequestDto requestDto) throws BaseException;
+
+    // 2. 결제 키로 중복 조회
+    boolean checkPaymentDupl(String paymentKey) throws BaseException;
 }
