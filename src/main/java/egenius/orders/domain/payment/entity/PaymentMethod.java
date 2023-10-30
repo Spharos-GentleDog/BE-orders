@@ -1,6 +1,6 @@
 package egenius.orders.domain.payment.entity;
 
-import egenius.orders.global.common.enums.AbstractBaseEnumConverter;
+import egenius.orders.global.common.enums.BaseEnumConverter;
 import egenius.orders.global.common.enums.BaseEnum;
 import jakarta.persistence.Converter;
 import lombok.AllArgsConstructor;
@@ -28,7 +28,7 @@ public enum PaymentMethod implements BaseEnum<String, String> {
 
     // 3. converter 구현
     @Converter(autoApply = true)
-    static class thisConverter extends AbstractBaseEnumConverter<PaymentMethod, String, String> {
+    static class thisConverter extends BaseEnumConverter<PaymentMethod, String, String> {
         public thisConverter() {
             super(PaymentMethod.class);
         }
