@@ -8,26 +8,39 @@ import egenius.orders.domain.payment.entity.PaymentStatus;
 import egenius.orders.domain.payment.infrastructure.*;
 import egenius.orders.global.common.exception.BaseException;
 import egenius.orders.global.common.response.BaseResponseStatus;
+//import egenius.orders.global.config.kafka.KafkaConfig;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.clients.admin.NewTopic;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.kafka.clients.consumer.ConsumerRecords;
+import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.Optional;
+import java.util.Properties;
 
 
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class PaymentServiceImpl implements PaymentService{
+@Slf4j
+public class PaymentServiceImpl implements PaymentService {
 
     private final PaymentRepository paymentRepository;
     private final CancelsRepository cancelsRepository;
     private final ModelMapper modelMapper;
+//    private final KafkaConfig kafkaConfig;
+
 
     /**
      * payment
-     *
+     * <p>
      * 1. 결제 요청
      * 2. 결제 키로 조회
      * 3. 결제 취소
@@ -78,4 +91,38 @@ public class PaymentServiceImpl implements PaymentService{
         // 저장
         cancelsRepository.save(cancels);
     }
+
+
+//    @KafkaListener(topics = "payment_data", groupId = "test1")
+//    public void listen(ConsumerRecord<String, String> record) {
+//        String topic = record.topic();
+//        int partition = record.partition();
+//        long offset = record.offset();
+//        String key = record.key();
+//        String value = record.value();
+//
+//        // Kafka 메시지 처리 로직을 여기에 구현
+//        System.out.println("kafka message value:" + value);
+//    }
+
+//    public void continueListen() {
+//        log.info("ContinueListen is running");
+//
+//        KafkaConsumer<String, String> consumer = kafkaConfig.createConsumer();
+//        consumer.subscribe(Arrays.asList("payment_data"));
+//
+//        int result = 0;
+//        while (true) {
+//            // poll에서 설정한 ms동안 데이터를 기다린다 = 설정한 값동안 기다리다가 다음 코드를 실행한다
+//            // 만약 그 시간동안 데이터가 오지 않는다면 -> 빈 records를 반환, 데이터가 있다면 데이터 records를 반환
+//            ConsumerRecords<String, String> records = consumer.poll(10000000);
+//            // records는 데이터 list이므로, record로 뽑아낸 후 record.value()로 프로듀서가 보낸 진짜 값을 가져올 수 있다
+//            for (ConsumerRecord<String, String> record : records) {
+//                result += Integer.parseInt(record.value());
+//                System.out.println("record.value() = " + record.value()+", result = "+result);
+//
+//            }
+//            System.out.println("final result = " + result);
+//        }
+//    }
 }

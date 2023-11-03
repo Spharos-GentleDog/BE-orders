@@ -30,6 +30,9 @@ public class BaseExceptionHandler {
         // BaseException으로 잡히지 않는 RuntimeError는, INTERNAL_SEBVER_ERROR로 처리해줌
         BaseResponse response = new BaseResponse(BaseResponseStatus.INTERNAL_SERVER_ERROR);
         log.info("RuntimeException: " + e.getMessage());
+        for (StackTraceElement s : e.getStackTrace()) {
+            System.out.println(s);
+        }
         return new ResponseEntity<>(response, response.httpStatus());
     }
 
