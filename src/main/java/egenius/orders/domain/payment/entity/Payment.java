@@ -12,37 +12,38 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "payment")
 public class Payment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "payment_key", length = 200)
+    @Column(name = "payment_key", length = 200, nullable = false)
     private String paymentKey;
 
-    @Column(name = "payment_method", length = 1)
+    @Column(name = "payment_method", length = 1, nullable = false)
     private PaymentMethod paymentMethod;
 
-    @Column(name = "payment_status", columnDefinition = "tinyint", length = 10)
+    @Column(name = "payment_status", columnDefinition = "tinyint", length = 10, nullable = false)
     private PaymentStatus paymentStatus;
 
-    @Column(name = "payment_total_amount")
+    @Column(name = "payment_total_amount", nullable = false)
     private Integer paymentTotalAmount;
 
-    @Column(name = "requested_at")
+    @Column(name = "requested_at", nullable = false)
     private LocalDateTime requestedAt;
 
-    @Column(name = "approved_at")
+    @Column(name = "approved_at", nullable = false)
     private LocalDateTime approvedAt;
 
-    @Column(name = "is_partial", columnDefinition = "tinyint(1)")
+    @Column(name = "is_partial", columnDefinition = "tinyint(1)", nullable = false)
     private Boolean isPartial;
 
-    @Column(name = "receipt_url", length = 100)
+    @Column(name = "receipt_url", length = 100, nullable = false)
     private String receipt_url;
 
-    @Column(name = "balance_amount")
+    @Column(name = "balance_amount", nullable = false)
     private Integer balanceAmount;
 
 

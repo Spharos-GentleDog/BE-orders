@@ -1,5 +1,8 @@
 package egenius.orders.domain.batch.presentation;
 
+import egenius.orders.global.common.exception.BaseException;
+import egenius.orders.global.common.response.BaseResponse;
+import egenius.orders.global.common.response.BaseResponseStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.*;
@@ -30,7 +33,7 @@ public class BatchController {
 
     //1. 결제 내역, 정산 서버로 전송
     @GetMapping("")
-    public void batchTest() {
+    public BaseResponse paymentDataTransferBatch() {
         Date today = Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
         JobParameters jobParameters = new JobParametersBuilder()
                         .addDate("Date:"+LocalDateTime.now(), today)
@@ -45,7 +48,8 @@ public class BatchController {
             }
         } catch (Exception e) {
             log.error(e.getMessage());
+            throw new BaseException(BaseResponseStatus.PAYMENT_DATA_TRANSFER_FAILED);
         }
-
+        return new BaseResponse();
     }
 }
