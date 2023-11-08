@@ -40,6 +40,15 @@ dependencies {
     implementation group: 'org.modelmapper', name: 'modelmapper', version: '3.0.0'
     // m1 netty : Netty는 네트워크 프로그래밍에 사용되는 Java 라이브러리로, 네트워크 소켓 통신 및 다른 네트워크 관련 작업을 처리하는 데 사용
     implementation 'io.netty:netty-resolver-dns-native-macos:4.1.68.Final:osx-aarch_64'
+    // batch
+    implementation 'org.springframework.boot:spring-boot-starter-batch'
+    // kafka - 로컬이나 ec2에 설치된 버전과 동일하게 맞춘다. 현재 3.6.0버전이다 but.. 설치되는건 3.4.1이 최대인듯
+    implementation 'org.springframework.kafka:spring-kafka'
+    // Querydsl
+    implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+    annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta" // 버전 변경
+    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 }
 
 dependencyManagement {
