@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Getter
+@Table(name = "cancels")
 public class Cancels {
 
     @Id
@@ -17,19 +18,19 @@ public class Cancels {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "payment_id", referencedColumnName = "id")
+    @JoinColumn(name = "payment_id", referencedColumnName = "id", nullable = false)
     private Payment payment;
 
-    @Column(name = "canceled_at")
+    @Column(name = "canceled_at", nullable = false)
     private LocalDateTime canceledAt;
 
-    @Column(name = "cancel_amount")
+    @Column(name = "cancel_amount", nullable = false)
     private Integer cancelAmount;
 
-    @Column(name = "transaction_key", length = 64)
+    @Column(name = "transaction_key", length = 64, nullable = false)
     private String transactionKey;
 
-    @Column(name = "receipt_key", length = 200)
+    @Column(name = "receipt_key", length = 200, nullable = false)
     private String receiptKey;
 
 
