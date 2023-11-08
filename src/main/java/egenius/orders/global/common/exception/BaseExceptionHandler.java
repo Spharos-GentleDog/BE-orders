@@ -25,12 +25,12 @@ public class BaseExceptionHandler {
     }
 
     // 런타임 에러
-    @ExceptionHandler(RuntimeException.class)
-    protected ResponseEntity<?> RuntimeError(RuntimeException e) {
-        // BaseException으로 잡히지 않는 RuntimeError는, INTERNAL_SEBVER_ERROR로 처리해줌
-        BaseResponse response = new BaseResponse(BaseResponseStatus.INTERNAL_SERVER_ERROR);
-        log.info("RuntimeException: " + e.getMessage());
-        return new ResponseEntity<>(response, response.httpStatus());
-    }
+//    @ExceptionHandler(RuntimeException.class)
+//    protected ResponseEntity<?> RuntimeError(RuntimeException e) {
+//        // BaseException으로 잡히지 않는 RuntimeError는, INTERNAL_SEBVER_ERROR로 처리해줌
+//        BaseResponse response = new BaseResponse(BaseResponseStatus.INTERNAL_SERVER_ERROR);
+//        log.info("RuntimeException: " + e.getMessage());
+//        return new ResponseEntity<>(response, response.httpStatus());
+//    }
 
 }
