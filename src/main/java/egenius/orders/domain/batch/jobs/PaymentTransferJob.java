@@ -1,8 +1,6 @@
 package egenius.orders.domain.batch.jobs;
 
 import com.querydsl.core.Tuple;
-import egenius.orders.domain.batch.entity.PaymentTransferHistory;
-import egenius.orders.domain.batch.infrastructure.PaymentTransferHistoryRepository;
 import egenius.orders.domain.batch.chunk.QuerydslPagingItemReader;
 import egenius.orders.domain.payment.entity.PaymentMethod;
 import egenius.orders.domain.payment.entity.QPayment;
@@ -15,6 +13,7 @@ import org.springframework.batch.core.*;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
+import org.springframework.batch.item.Chunk;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.context.annotation.Bean;
@@ -33,18 +32,13 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class PaymentTransferJob {
 
-    // util
-    private final ModelMapper modelMapper;
-    // repository
-    private final PaymentTransferHistoryRepository historyRepository;
-
     // spring batch
     private final static int CHUNK_SIZE = 100;
     private final JobRepository jobRepository;
     private final EntityManagerFactory enf;
     private final PlatformTransactionManager transactionManager;
     // kafka
-    private final KafkaTemplate<String, Map> kafkaTemplate;  // producer에서 message를 send 하기위한 카프카 템플릿
+    private final KafkaTemplate<String, Chunk> kafkaTemplate;  // producer에서 message를 send 하기위한 카프카 템플릿
     private final NewTopic paymentTopic; // 미리 bean 등록해둔 topic
 
 
@@ -80,6 +74,8 @@ public class PaymentTransferJob {
 
 
     // 3. reader -> QueryDsl은 Tuple형태로 데이터를 return하므로 제네릭에 tuple을 적는다
+    // todo: noOffset으로 성능향상 시켜보
+    // todo: order 도메인이 완성되면, paymentKey에 해당하는 order를 조회하고 vendorEmail를 넣기
     @Bean
     public QuerydslPagingItemReader<Tuple> reader() {
         LocalDateTime start = LocalDate.now().atStartOfDay();
@@ -88,7 +84,9 @@ public class PaymentTransferJob {
 
         // 오늘의 결제 내역, 주문내역을 모두 가져옴
         QPayment qPayment = QPayment.payment;
-        return new QuerydslPagingItemReader<>(enf, CHUNK_SIZE,
+        QuerydslPagingItemReader<Tuple> reader = new QuerydslPagingItemReader<>(
+                enf,
+                CHUNK_SIZE,
                 queryFactory -> queryFactory
                         .select(qPayment.paymentTotalAmount,
                                 qPayment.paymentMethod,
@@ -96,23 +94,25 @@ public class PaymentTransferJob {
                         .from(qPayment)
                         .where(qPayment.approvedAt.goe(start).and(qPayment.approvedAt.lt(end)))
         );
+        // PageSize가 10이고, ChunkSize가 50이라면 ItemReader에서 Page 조회가 5번 일어나면 1번 의 트랜잭션이 발생하여 Chunk가 처리됩니다.
+        // 한번의 트랜잭션 처리를 위해 5번의 쿼리 조회가 발생하기 때문에 성능상 이슈가 발생할 수 있습니다.
+        // 또한 PageSize와 ChunkSize가 다른경우 JPA를 사용하면 영속성 컨텍스트가 깨질 수도 있음 -> 따라서 두 개를 같게 해야한다
+        reader.setPageSize(CHUNK_SIZE);
+        return reader;
     }
+
 
     // 4. processor
     @Bean
     public ItemProcessor<Tuple, Map> processor() {
         return tuple -> {
             Map<String, String> jsonData = new HashMap<>();
-            // 형 변환
-            Integer amount = tuple.get(0, Integer.class);
-            PaymentMethod method = tuple.get(1, PaymentMethod.class);
-            LocalDateTime date = tuple.get(2, LocalDateTime.class);
-            String formattedDate = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"));
-
             // key-value 삽입
-            jsonData.put("paymentAmount", String.valueOf(amount));
-            jsonData.put("paymentMethod", String.valueOf(method));
-            jsonData.put("paidAt", formattedDate);
+            jsonData.put("paymentAmount", String.valueOf(tuple.get(0, Integer.class)));
+            jsonData.put("paymentMethod", String.valueOf(tuple.get(1, PaymentMethod.class)));
+            jsonData.put("paidAt", tuple.get(
+                    2,
+                    LocalDateTime.class).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")));
             jsonData.put("vendorEmail", "test@email.com");
             return jsonData;
         };
@@ -122,19 +122,9 @@ public class PaymentTransferJob {
     // 5. writer
     @Bean
     public ItemWriter<Map> writer() {
-        System.out.println("start!");
-        return chunk -> {
-            log.info("kafka - payment send 시작");
-            // kafka producer를 사용해서 보내기 시작
-            System.out.println("chunk = " + chunk);
-            chunk.forEach(data -> {
-                log.info("data = "+data);
-                System.out.println(data.getClass().getName());
-                PaymentTransferHistory history = modelMapper.map(data, PaymentTransferHistory.class);
-                historyRepository.save(history);
-                kafkaTemplate.send(paymentTopic.name(), data);
-                }
-            );
-        };
+        log.info("payment history send start!");
+        // chunk단위로 한번에 보낸다
+        return chunk ->
+            kafkaTemplate.send(paymentTopic.name(), chunk);
     }
 }

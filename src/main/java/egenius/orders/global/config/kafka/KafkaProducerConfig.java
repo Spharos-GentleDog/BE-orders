@@ -3,6 +3,7 @@ package egenius.orders.global.config.kafka;
 import com.querydsl.core.Tuple;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
+import org.springframework.batch.item.Chunk;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,7 +31,7 @@ public class KafkaProducerConfig {
 
     // Producer 생성 -> 매번 새로운 producer를 생성하는건 부하가 크기에 factory를 사용해서 같은 producer 인스턴스를 재사용
     @Bean
-    public ProducerFactory<String, Map> producerFactory() {
+    public ProducerFactory<String, Chunk> producerFactory() {
         Map<String, Object> configs = new HashMap<>();
         // BootStrap 서버주소
         configs.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
@@ -42,7 +43,7 @@ public class KafkaProducerConfig {
     }
 
     @Bean
-    public KafkaTemplate<String, Map> kafkaTemplate() {
+    public KafkaTemplate<String, Chunk> kafkaTemplate() {
         // 앞서 생성한 producerFactory를 인수로 넣음
         return new KafkaTemplate<>(producerFactory());
     }
