@@ -8,7 +8,6 @@ import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.admin.NewTopic;
-import org.modelmapper.ModelMapper;
 import org.springframework.batch.core.*;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
@@ -78,9 +77,9 @@ public class PaymentTransferJob {
     // todo: order 도메인이 완성되면, paymentKey에 해당하는 order를 조회하고 vendorEmail를 넣기
     @Bean
     public QuerydslPagingItemReader<Tuple> reader() {
-        LocalDateTime start = LocalDate.now().atStartOfDay();
-        LocalDateTime end = LocalDate.now().plusDays(1).atStartOfDay();
-        System.out.println("end = " + end);
+        // 자정이 넘어서 실행되므로 -> '시작 날짜' = '어제', '끝 날짜' = '오늘' 이 된다
+        LocalDateTime start = LocalDate.now().minusDays(1).atStartOfDay();
+        LocalDateTime end = LocalDate.now().atStartOfDay();
 
         // 오늘의 결제 내역, 주문내역을 모두 가져옴
         QPayment qPayment = QPayment.payment;
