@@ -19,4 +19,23 @@ public class RefundList extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="orders_detail_id", referencedColumnName = "id", nullable = false)
     private OrdersDetail ordersDetail;
+
+    @Column(name = "vender_id", nullable = false)
+    private Long venderId;
+
+    @Column(name = "orders_number", length = 20, nullable = false)
+    private String ordersNumber;
+
+    @Column(name = "refund_product_quantity", columnDefinition = "smallint", nullable = false)
+    private Integer refundProductQuantity;
+
+    @Column(name = "refund_product_price", nullable = false)
+    private Integer refundProductPrice;
+
+    @Column(name = "refund_status", columnDefinition = "tinyint", nullable = false)
+    private Integer refundStatus;
+
+    @Column(name = "refund_reason", length = 200, nullable = false)
+    private String refundReason;
+
 }

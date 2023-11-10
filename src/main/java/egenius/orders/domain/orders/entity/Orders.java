@@ -19,6 +19,9 @@ public class Orders extends BaseTimeEntity {
     @Column(name = "orders_number", length = 20, nullable = false)
     private String ordersNumber;
 
+    @Column(name = "orders_representative_product", length = 100, nullable = false)
+    private String ordersRepresentativeProduct;
+
     @Column(name = "user_email", length = 30, nullable = false)
     private String userEmail;
 
@@ -28,8 +31,8 @@ public class Orders extends BaseTimeEntity {
     @Column(name = "orders_product_name", length = 100, nullable = false)
     private String ordersProductName;
 
-    @Column(name = "orders_prequst_message", length = 100)
-    private String ordersPrequstMessage;
+    @Column(name = "orders_request_message", length = 100)
+    private String ordersRequestMessage;
 
     @Column(name = "orders_type", nullable = false)
     private Integer ordersType;

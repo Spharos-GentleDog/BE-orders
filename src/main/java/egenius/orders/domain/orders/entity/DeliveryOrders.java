@@ -19,8 +19,8 @@ public class DeliveryOrders extends BaseTimeEntity {
     @Column(name = "tracking_number", length = 20, nullable = false)
     private String trackingNumber;
 
-    @Column(name = "delivery_status", nullable = false)
-    private String deliveryStatus;
+    @Column(name = "delivery_status", columnDefinition = "tinyint", nullable = false)
+    private Integer deliveryStatus;
 
     @Column(name = "address_alias", length = 20, nullable = false)
     private String addressAlias;
