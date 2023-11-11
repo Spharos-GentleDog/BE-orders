@@ -51,6 +51,13 @@ public class OrdersDetail extends BaseTimeEntity {
     @Column(name = "product_status", columnDefinition = "tinyint", nullable = false)
     private Integer productStatus;
 
+    @Column(name = "coupon_id")
+    private Long couponId;
 
+    @Column(name = "coupon_discount_price")
+    private Integer couponDiscountPrice;
+
+    @Column(name = "total_favorite")
+    private Integer totalFavorite;
 
 }
