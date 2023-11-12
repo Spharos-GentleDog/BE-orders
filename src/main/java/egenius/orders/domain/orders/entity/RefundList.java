@@ -20,8 +20,8 @@ public class RefundList extends BaseTimeEntity {
     @JoinColumn(name="orders_detail_id", referencedColumnName = "id", nullable = false)
     private OrdersDetail ordersDetail;
 
-    @Column(name = "vender_id", nullable = false)
-    private Long venderId;
+    @Column(name = "vendor_id", nullable = false)
+    private Long vendorId;
 
     @Column(name = "orders_number", length = 20, nullable = false)
     private String ordersNumber;

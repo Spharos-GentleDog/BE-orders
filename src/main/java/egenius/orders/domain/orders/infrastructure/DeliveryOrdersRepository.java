@@ -1,4 +1,7 @@
 package egenius.orders.domain.orders.infrastructure;
 
-public interface DeliveryOrdersRepository {
+import egenius.orders.domain.orders.entity.DeliveryOrders;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface DeliveryOrdersRepository extends JpaRepository<DeliveryOrders, Long> {
 }

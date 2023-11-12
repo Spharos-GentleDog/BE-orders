@@ -10,21 +10,21 @@ import lombok.*;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
-public class VenderOrders extends BaseTimeEntity {
+public class VendorList extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "vender_orders_id", nullable = false)
-    private VenderOrders venderOrders;
+    @JoinColumn(name = "vendor_orders_id", nullable = false)
+    private VendorList vendorList;
 
     @Column(name = "orders_number", length = 20, nullable = false)
     private String ordersNumber;
 
-    @Column(name = "vender_id", nullable = false)
-    private Long venderId;
+    @Column(name = "vendor_id", nullable = false)
+    private Long vendorId;
 
     @Column(name = "delivery_price", nullable = false)
     private Long deliveryPrice;

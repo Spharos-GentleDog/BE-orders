@@ -3,13 +3,13 @@ package egenius.orders.domain.orders.dto;
 import lombok.Getter;
 
 @Getter
-public class CreateOrdersRequestDto {
+public class RegisterInRequestDto {
     private String ordersName;
     private String ordersPhoneNumber;
     private String ordersEmail;
-    private String orders_request_message;
-    private String orders_type;
-    private Long venderId;
+    private String ordersRequestMessage;
+    private String ordersType;
+    private Long vendorId;
     private String brandName;
     private String brandLogoImageUrl;
     private Integer deliveryFee;
@@ -21,6 +21,7 @@ public class CreateOrdersRequestDto {
     private String productSize;
     private String productColor;
     private Integer productStatus;
+    private Integer productDiscountRate;
     private Long couponId;
     private Integer couponDiscountPrice;
     private String addressPhoneNumber;

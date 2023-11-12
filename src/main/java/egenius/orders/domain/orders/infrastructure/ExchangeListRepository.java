@@ -1,4 +1,7 @@
 package egenius.orders.domain.orders.infrastructure;
 
-public interface ExchangeListRepository {
+import egenius.orders.domain.orders.entity.ExchangeList;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ExchangeListRepository extends JpaRepository<ExchangeList, Long> {
 }

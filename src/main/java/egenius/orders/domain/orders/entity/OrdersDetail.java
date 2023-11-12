@@ -30,8 +30,8 @@ public class OrdersDetail extends BaseTimeEntity {
     @Column(name = "product_id", nullable = false)
     private Long productId;
 
-    @Column(name = "vender_id", nullable = false)
-    private Long venderId;
+    @Column(name = "vendor_id", nullable = false)
+    private Long vendorId;
 
     @Column(name = "product_name", length = 100, nullable = false)
     private String productName;
@@ -51,13 +51,16 @@ public class OrdersDetail extends BaseTimeEntity {
     @Column(name = "product_status", columnDefinition = "tinyint", nullable = false)
     private Integer productStatus;
 
+    @Column(name = "product_discount_rate", nullable = false)
+    private Integer productDiscountRate;
+
+    @Column(name = "product_image_url", length = 100, nullable = false)
+    private String productImageUrl;
+
     @Column(name = "coupon_id")
     private Long couponId;
 
     @Column(name = "coupon_discount_price")
     private Integer couponDiscountPrice;
-
-    @Column(name = "total_favorite")
-    private Integer totalFavorite;
 
 }
