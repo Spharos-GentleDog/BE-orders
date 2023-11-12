@@ -2,9 +2,11 @@ package egenius.orders.domain.payment.application;
 
 import egenius.orders.domain.payment.dto.CancelsRequestDto;
 import egenius.orders.domain.payment.dto.PaymentRequestDto;
+import egenius.orders.domain.payment.dto.ProductPaymentDto;
 import egenius.orders.domain.payment.entity.Cancels;
 import egenius.orders.domain.payment.entity.Payment;
 import egenius.orders.domain.payment.entity.PaymentStatus;
+import egenius.orders.domain.payment.entity.ProductPayment;
 import egenius.orders.domain.payment.infrastructure.*;
 import egenius.orders.global.common.exception.BaseException;
 import egenius.orders.global.common.response.BaseResponseStatus;
@@ -13,6 +15,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -23,6 +27,7 @@ public class PaymentServiceImpl implements PaymentService{
 
     private final PaymentRepository paymentRepository;
     private final CancelsRepository cancelsRepository;
+    private final ProductPaymentRepository productPaymentRepository;
     private final ModelMapper modelMapper;
 
     /**
@@ -41,8 +46,19 @@ public class PaymentServiceImpl implements PaymentService{
         if (!(searchResult == null)) {
             throw new BaseException(BaseResponseStatus.ALREADY_PAID_ORDER_ID);
         }
-        // modelMapper를 사용하여 entity 생성 후 저장
+
+        // 상품별 결제 내역을 먼저 생성
+        List<ProductPaymentDto> productList = requestDto.getProductPaymentList();
+        List<ProductPayment> productPaymentList = new ArrayList<>();
+        productList.forEach(product -> {
+            ProductPayment productPayment = modelMapper.map(product, ProductPayment.class);
+            productPaymentRepository.save(productPayment);
+            productPaymentList.add(productPayment);
+        });
+
+        // modelMapper를 사용하여 entity 생성 후, 상품별 결재내역을 업데이트하고 저장
         Payment payment = modelMapper.map(requestDto, Payment.class);
+        payment.updateProductPayment(productPaymentList);
         paymentRepository.save(payment);
     }
 
