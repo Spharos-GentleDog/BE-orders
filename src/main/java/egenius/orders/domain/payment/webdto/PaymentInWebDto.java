@@ -1,11 +1,13 @@
 package egenius.orders.domain.payment.webdto;
 
+import egenius.orders.domain.payment.dto.ProductPaymentDto;
 import egenius.orders.domain.payment.entity.PaymentMethod;
 import egenius.orders.domain.payment.entity.PaymentStatus;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @ToString
@@ -29,4 +31,6 @@ public class PaymentInWebDto {
     private LocalDateTime requestedAt;
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime approvedAt;
+
+    private List<ProductPaymentDto> productPaymentList;
 }

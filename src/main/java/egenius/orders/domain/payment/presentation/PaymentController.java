@@ -25,10 +25,11 @@ public class PaymentController {
      * payment
      * 1. 결제
      * 2. 결제 취소
+     * 3. 상품별 결제
      */
 
     //1. 결제
-    @Operation(summary = "결제", description = "결제내역 저장", tags = { "Orders Payment" })
+    @Operation(summary = "결제", description = "결제내역 저장", tags = {"Orders Payment"})
     @PostMapping("")
     public BaseResponse<?> requestPayment(@RequestBody PaymentInWebDto inDto) {
         PaymentRequestDto requestDto = modelMapper.map(inDto, PaymentRequestDto.class);
@@ -37,7 +38,7 @@ public class PaymentController {
     }
 
     //2. 결제 취소
-    @Operation(summary = "결제 취소", description = "결제 취소", tags = { "Orders Payment" })
+    @Operation(summary = "결제 취소", description = "결제 취소", tags = {"Orders Payment"})
     @PostMapping("/cancel")
     public BaseResponse<?> cancelPayment(@RequestBody CancelsInWebDto inDto) {
         CancelsRequestDto requestDto = modelMapper.map(inDto, CancelsRequestDto.class);
