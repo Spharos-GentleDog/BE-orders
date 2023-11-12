@@ -73,7 +73,8 @@ public class PaymentTransferJob {
 
 
     // 3. reader -> QueryDsl은 Tuple형태로 데이터를 return하므로 제네릭에 tuple을 적는다
-    // todo: noOffset으로 성능향상 시켜보
+    // 넘길 자료를 취합 : 결제 1건당 -> 결제금액, 결제수단, 상품명, 상품코드, 승인날짜, 판매자email 필요함
+    // todo: noOffset으로 성능향상 시켜보기
     // todo: order 도메인이 완성되면, paymentKey에 해당하는 order를 조회하고 vendorEmail를 넣기
     @Bean
     public QuerydslPagingItemReader<Tuple> reader() {

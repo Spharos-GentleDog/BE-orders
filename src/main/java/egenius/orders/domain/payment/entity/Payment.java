@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Entity
@@ -46,11 +47,16 @@ public class Payment {
     @Column(name = "balance_amount", nullable = false)
     private Integer balanceAmount;
 
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_payment_id", referencedColumnName = "id")
+    private List<ProductPayment> productPaymentList;
+
 
     /**
      * Payment
      * 1. 결제상태 업데이트
      * 2. 취소가능 잔고 업데이트
+     * 3. 상품 결제내역 업데이트
      */
 
     // 1. 결제상태 업데이트
@@ -66,4 +72,10 @@ public class Payment {
             throw new BaseException(BaseResponseStatus.CANCELED_AMOUNT_EXCEEDED);
         }
     }
+
+    // 3. 상품 결제내역 업데이트
+    public void updateProductPayment(List productPaymentList) {
+        this.productPaymentList = productPaymentList;
+    }
+
 }
