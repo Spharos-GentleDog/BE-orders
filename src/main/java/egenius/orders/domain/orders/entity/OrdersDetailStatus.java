@@ -1,6 +1,5 @@
 package egenius.orders.domain.orders.entity;
 
-import egenius.orders.domain.payment.entity.PaymentStatus;
 import egenius.orders.global.common.enums.BaseEnum;
 import egenius.orders.global.common.enums.BaseEnumConverter;
 import jakarta.persistence.Converter;
@@ -9,7 +8,7 @@ import lombok.Getter;
 
 @Getter // BaseEnum의 method를 impl하는것을 -> Getter로 대체
 @AllArgsConstructor // 생성자를 직접 만들지 않고 -> AllArgs로 대체
-public enum RefundStatus implements BaseEnum<Integer, String> {
+public enum OrdersDetailStatus implements BaseEnum<Integer, String> {
 
     /**
      * 1. 코드 작성
@@ -18,10 +17,12 @@ public enum RefundStatus implements BaseEnum<Integer, String> {
      */
 
     // 1. 코드 작성
-    READY(0, "환불 준비중"),
-    IN_PROGRESS(1, "환불 중"),
-    DONE(2, "환불 완료"),
-    CANCELED(3, "환불 취소");
+    READY(0, "주문 접수"),
+    IN_PROGRESS(1, "주문 중"),
+    DONE(2, "주문 완료"),
+    CANCELED(3, "주문 취소"),
+    EXCHANGE(4, "교환"),
+    REFUND(5, "환불");
 
     // 2. field 선언
     private final Integer code;
@@ -29,9 +30,9 @@ public enum RefundStatus implements BaseEnum<Integer, String> {
 
     // 3. converter 구현
     @Converter(autoApply = true)
-    static class thisConverter extends BaseEnumConverter<RefundStatus, Integer, String> {
+    static class thisConverter extends BaseEnumConverter<OrdersDetailStatus, Integer, String> {
         public thisConverter() {
-            super(RefundStatus.class);
+            super(OrdersDetailStatus.class);
         }
     }
 }

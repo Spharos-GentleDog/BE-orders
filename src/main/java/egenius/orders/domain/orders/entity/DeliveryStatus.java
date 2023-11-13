@@ -18,7 +18,7 @@ public enum DeliveryStatus implements BaseEnum<Integer, String> {
      */
 
     // 1. 코드 작성
-    READY(0, "배송 준비중"),
+    READY(0, "배송 접수"),
     IN_PROGRESS(1, "배송 중"),
     DONE(2, "배송 완료"),
     CANCELED(3, "배송 취소");
@@ -29,9 +29,9 @@ public enum DeliveryStatus implements BaseEnum<Integer, String> {
 
     // 3. converter 구현
     @Converter(autoApply = true)
-    static class thisConverter extends BaseEnumConverter<PaymentStatus, Integer, String> {
+    static class thisConverter extends BaseEnumConverter<DeliveryStatus, Integer, String> {
         public thisConverter() {
-            super(PaymentStatus.class);
+            super(DeliveryStatus.class);
         }
     }
 

@@ -19,22 +19,19 @@ public class Orders extends BaseTimeEntity {
     @Column(name = "orders_number", length = 20, nullable = false)
     private String ordersNumber;
 
-    @Column(name = "orders_representative_product", length = 100, nullable = false)
-    private String ordersRepresentativeProduct;
-
     @Column(name = "user_email", length = 30, nullable = false)
     private String userEmail;
 
     @Column(name = "user_name", length = 100, nullable = false)
     private String userName;
 
-    @Column(name = "orders_product_name", length = 100, nullable = false)
-    private String ordersProductName;
-
     @Column(name = "orders_request_message", length = 100)
     private String ordersRequestMessage;
 
-    @Column(name = "orders_type", nullable = false)
+    @Column(name = "orders_type", columnDefinition = "tinyint(1)", nullable = false)
     private Integer ordersType;
+
+    @Column(name = "usred_point", nullable = false)
+    private Integer usedPoint;
 
 }

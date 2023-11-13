@@ -17,30 +17,23 @@ public class OrdersDetail extends BaseTimeEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "orders_id", nullable = false)
-    private Orders orders;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "delivery_orders_id", nullable = false)
-    private DeliveryOrders deliveryOrders;
-
-    @Column(name = "product_detail_id", nullable = false)
-    private Long productDetailId;
+    @JoinColumn(name = "vendor_orders_list_id", nullable = false)
+    private VendorOrdersList vendorOrdersList;
 
     @Column(name = "product_id", nullable = false)
     private Long productId;
 
-    @Column(name = "vendor_id", nullable = false)
-    private Long vendorId;
+    @Column(name = "product_detail_id", nullable = false)
+    private Long productDetailId;
 
     @Column(name = "product_name", length = 100, nullable = false)
     private String productName;
 
-    @Column(name = "product_price", nullable = false)
-    private Integer productPrice;
-
     @Column(name = "product_quantity", nullable = false)
     private Integer productQuantity;
+
+    @Column(name = "product_price", nullable = false)
+    private Integer productPrice;
 
     @Column(name = "product_size", length = 20, nullable = false)
     private String productSize;

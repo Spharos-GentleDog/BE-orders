@@ -22,14 +22,11 @@ public class DeliveryOrders extends BaseTimeEntity {
     @Column(name = "delivery_status", columnDefinition = "tinyint", nullable = false)
     private Integer deliveryStatus;
 
-    @Column(name = "address_alias", length = 20, nullable = false)
-    private String addressAlias;
+    @Column(name = "recipient_name", length = 20, nullable = false)
+    private String recipientName;
 
     @Column(name = "recipient_address", length = 100, nullable = false)
     private String recipientAddress;
-
-    @Column(name = "recipient_name", length = 20, nullable = false)
-    private String recipientName;
 
     @Column(name = "recipient_phone_number", length = 20, nullable = false)
     private String recipientPhoneNumber;
@@ -37,7 +34,7 @@ public class DeliveryOrders extends BaseTimeEntity {
     @Column(name = "entrance_password", length = 20)
     private String entrancePassword;
 
-    @Column(name = "address_request_message", length = 100)
-    private String addressRequestMessage;
+    @Column(name = "delivery_request_message", length = 100)
+    private String deliveryRequestMessage;
 
 }

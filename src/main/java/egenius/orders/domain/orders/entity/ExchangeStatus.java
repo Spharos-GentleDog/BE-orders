@@ -18,7 +18,7 @@ public enum ExchangeStatus implements BaseEnum<Integer, String> {
      */
 
     // 1. 코드 작성
-    READY(0, "교환 준비중"),
+    READY(0, "교환 접수"),
     IN_PROGRESS(1, "교환 중"),
     DONE(2, "교환 완료"),
     CANCELED(3, "교환 취소");
@@ -29,9 +29,9 @@ public enum ExchangeStatus implements BaseEnum<Integer, String> {
 
     // 3. converter 구현
     @Converter(autoApply = true)
-    static class thisConverter extends BaseEnumConverter<PaymentStatus, Integer, String> {
+    static class thisConverter extends BaseEnumConverter<ExchangeStatus, Integer, String> {
         public thisConverter() {
-            super(PaymentStatus.class);
+            super(ExchangeStatus.class);
         }
     }
 }

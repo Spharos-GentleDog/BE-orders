@@ -10,7 +10,7 @@ import lombok.*;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
-public class RefundList extends BaseTimeEntity {
+public class Refund extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,8 +20,8 @@ public class RefundList extends BaseTimeEntity {
     @JoinColumn(name="orders_detail_id", referencedColumnName = "id", nullable = false)
     private OrdersDetail ordersDetail;
 
-    @Column(name = "vendor_id", nullable = false)
-    private Long vendorId;
+    @Column(name = "vendor_email", nullable = false)
+    private String vendorEmail;
 
     @Column(name = "orders_number", length = 20, nullable = false)
     private String ordersNumber;

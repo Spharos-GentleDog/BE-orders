@@ -1,10 +1,9 @@
 package egenius.orders.domain.orders.application;
 
-import egenius.orders.domain.orders.dto.RegisterInRequestDto;
 import egenius.orders.domain.orders.infrastructure.DeliveryOrdersRepository;
 import egenius.orders.domain.orders.infrastructure.OrdersDetailRepository;
 import egenius.orders.domain.orders.infrastructure.OrdersRepository;
-import egenius.orders.domain.orders.infrastructure.VendorListRepository;
+import egenius.orders.domain.orders.infrastructure.VendorOrdersListRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +15,7 @@ public class OrdersServiceImple implements OrdersService{
 
     private final OrdersRepository ordersRepository;
     private final OrdersDetailRepository ordersDetailRepository;
-    private final VendorListRepository vendorListRepository;
+    private final VendorOrdersListRepository vendorOrdersListRepository;
     private final DeliveryOrdersRepository deliveryOrdersRepository;
 
     /**
@@ -34,7 +33,7 @@ public class OrdersServiceImple implements OrdersService{
      */
 
     @Override
-    public void registerOrders(RegisterInRequestDto registerInRequestDto) {
+    public void registerOrders() {
 
 
     }
