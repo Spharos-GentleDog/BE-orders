@@ -10,16 +10,16 @@ import lombok.*;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
-public class DeliveryOrders extends BaseTimeEntity {
+public class Delivery extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "tracking_number", length = 20, nullable = false)
+    @Column(name = "tracking_number", length = 20)
     private String trackingNumber;
 
-    @Column(name = "delivery_status", columnDefinition = "tinyint", nullable = false)
+    @Column(name = "delivery_status", columnDefinition = "tinyint DEFAULT 0")
     private Integer deliveryStatus;
 
     @Column(name = "recipient_name", length = 20, nullable = false)
@@ -37,4 +37,9 @@ public class DeliveryOrders extends BaseTimeEntity {
     @Column(name = "delivery_request_message", length = 100)
     private String deliveryRequestMessage;
 
+
+    // 배송 상태 변경
+    public void updateDeliveryStatus(Integer deliveryStatus) {
+        this.deliveryStatus = deliveryStatus;
+    }
 }

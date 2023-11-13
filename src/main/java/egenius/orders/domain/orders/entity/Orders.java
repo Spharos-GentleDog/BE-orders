@@ -25,6 +25,9 @@ public class Orders extends BaseTimeEntity {
     @Column(name = "user_name", length = 100, nullable = false)
     private String userName;
 
+    @Column(name = "user_phone_number", length = 20, nullable = false)
+    private String userPhoneNumber;
+
     @Column(name = "orders_request_message", length = 100)
     private String ordersRequestMessage;
 

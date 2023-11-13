@@ -16,10 +16,6 @@ public class OrdersDetail extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "vendor_orders_list_id", nullable = false)
-    private VendorOrdersList vendorOrdersList;
-
     @Column(name = "product_id", nullable = false)
     private Long productId;
 
@@ -55,5 +51,10 @@ public class OrdersDetail extends BaseTimeEntity {
 
     @Column(name = "coupon_discount_price")
     private Integer couponDiscountPrice;
+
+    // 상품 상태 변경
+    public void updateProductStatus(Integer productStatus) {
+        this.productStatus = productStatus;
+    }
 
 }
