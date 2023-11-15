@@ -38,7 +38,7 @@ public class KafkaProducerConfig {
         // Key와 Value의 직렬화에 사용할 클래스를 설정 -> 둘 다 문자열 데이터이므로 StringSerializer 사용
         // 만약 int 데이터라면 -> IntegerSerializer, Json이라면 -> JsonSerializer.class
         configs.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        configs.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        configs.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         return new DefaultKafkaProducerFactory<>(configs);
     }
 

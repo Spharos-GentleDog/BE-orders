@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.*;
 import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,6 +25,7 @@ public class BatchController {
     private final JobLauncher jobLauncher;
     private final Job paymentJob;
     // service
+    private final KafkaTemplate kafkaTemplate;
 
     /**
      * Spring batch
@@ -55,4 +57,12 @@ public class BatchController {
         }
         return new BaseResponse();
     }
+
+    // payment test
+    @GetMapping("/test")
+    public BaseResponse test() {
+        kafkaTemplate.send("test1", "kafka test success"+LocalDate.now());
+        return new BaseResponse();
+    }
+
 }
