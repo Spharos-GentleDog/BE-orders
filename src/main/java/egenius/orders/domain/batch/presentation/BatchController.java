@@ -61,7 +61,7 @@ public class BatchController {
     // payment test
     @GetMapping("/test")
     public BaseResponse test() {
-        kafkaTemplate.send("test1", "kafka test success"+LocalDate.now());
+        kafkaTemplate.send("test1", "kafka test success");
         return new BaseResponse();
     }
 
