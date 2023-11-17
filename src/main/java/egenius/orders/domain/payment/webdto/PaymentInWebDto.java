@@ -1,8 +1,8 @@
 package egenius.orders.domain.payment.webdto;
 
 import egenius.orders.domain.payment.dto.ProductPaymentDto;
-import egenius.orders.domain.payment.entity.PaymentMethod;
-import egenius.orders.domain.payment.entity.PaymentStatus;
+import egenius.orders.domain.payment.entity.enums.PaymentMethod;
+import egenius.orders.domain.payment.entity.enums.PaymentStatus;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/orders/payment/batch")
@@ -25,7 +26,6 @@ public class BatchController {
     private final JobLauncher jobLauncher;
     private final Job paymentJob;
     // service
-    private final KafkaTemplate kafkaTemplate;
 
     /**
      * Spring batch
@@ -58,11 +58,5 @@ public class BatchController {
         return new BaseResponse();
     }
 
-    // payment test
-    @GetMapping("/test")
-    public BaseResponse test() {
-        kafkaTemplate.send("test1", "kafka test success");
-        return new BaseResponse();
-    }
 
 }

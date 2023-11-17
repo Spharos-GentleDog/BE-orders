@@ -1,4 +1,4 @@
-package egenius.orders.domain.payment.entity;
+package egenius.orders.domain.payment.entity.enums;
 
 import egenius.orders.global.common.enums.BaseEnumConverter;
 import egenius.orders.global.common.enums.BaseEnum;

@@ -5,7 +5,7 @@ import egenius.orders.domain.payment.dto.PaymentRequestDto;
 import egenius.orders.domain.payment.dto.ProductPaymentDto;
 import egenius.orders.domain.payment.entity.Cancels;
 import egenius.orders.domain.payment.entity.Payment;
-import egenius.orders.domain.payment.entity.PaymentStatus;
+import egenius.orders.domain.payment.entity.enums.PaymentStatus;
 import egenius.orders.domain.payment.entity.ProductPayment;
 import egenius.orders.domain.payment.infrastructure.*;
 import egenius.orders.global.common.exception.BaseException;
@@ -15,7 +15,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,19 +46,17 @@ public class PaymentServiceImpl implements PaymentService{
             throw new BaseException(BaseResponseStatus.ALREADY_PAID_ORDER_ID);
         }
 
-        // 상품별 결제 내역을 먼저 생성
+        // modelMapper를 사용하여 entity 생성
+        Payment payment = modelMapper.map(requestDto, Payment.class);
+        paymentRepository.save(payment);
+
+        // 상품 결제내역 저장
         List<ProductPaymentDto> productList = requestDto.getProductPaymentList();
-        List<ProductPayment> productPaymentList = new ArrayList<>();
         productList.forEach(product -> {
             ProductPayment productPayment = modelMapper.map(product, ProductPayment.class);
+            productPayment.updatePayment(payment);
             productPaymentRepository.save(productPayment);
-            productPaymentList.add(productPayment);
-        });
-
-        // modelMapper를 사용하여 entity 생성 후, 상품별 결재내역을 업데이트하고 저장
-        Payment payment = modelMapper.map(requestDto, Payment.class);
-        payment.updateProductPayment(productPaymentList);
-        paymentRepository.save(payment);
+            });
     }
 
     // 2. 결제 키로 조회
