@@ -1,7 +1,7 @@
 package egenius.orders.domain.payment.dto;
 
-import egenius.orders.domain.payment.entity.PaymentMethod;
-import egenius.orders.domain.payment.entity.PaymentStatus;
+import egenius.orders.domain.payment.entity.enums.PaymentMethod;
+import egenius.orders.domain.payment.entity.enums.PaymentStatus;
 import lombok.Getter;
 import lombok.ToString;
 

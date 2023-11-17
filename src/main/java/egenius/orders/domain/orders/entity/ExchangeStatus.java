@@ -1,6 +1,5 @@
 package egenius.orders.domain.orders.entity;
 
-import egenius.orders.domain.payment.entity.PaymentStatus;
 import egenius.orders.global.common.enums.BaseEnum;
 import egenius.orders.global.common.enums.BaseEnumConverter;
 import jakarta.persistence.Converter;

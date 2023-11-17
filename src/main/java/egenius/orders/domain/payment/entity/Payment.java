@@ -1,5 +1,7 @@
 package egenius.orders.domain.payment.entity;
 
+import egenius.orders.domain.payment.entity.enums.PaymentMethod;
+import egenius.orders.domain.payment.entity.enums.PaymentStatus;
 import egenius.orders.global.common.exception.BaseException;
 import egenius.orders.global.common.response.BaseResponseStatus;
 import jakarta.persistence.*;
@@ -47,8 +49,7 @@ public class Payment {
     @Column(name = "balance_amount", nullable = false)
     private Integer balanceAmount;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_payment_id", referencedColumnName = "id")
+    @OneToMany(mappedBy = "payment",fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductPayment> productPaymentList;
 
 
@@ -72,10 +73,4 @@ public class Payment {
             throw new BaseException(BaseResponseStatus.CANCELED_AMOUNT_EXCEEDED);
         }
     }
-
-    // 3. 상품 결제내역 업데이트
-    public void updateProductPayment(List productPaymentList) {
-        this.productPaymentList = productPaymentList;
-    }
-
 }

@@ -32,4 +32,15 @@ public class ProductPayment {
 
     @Column(name = "count")
     private Integer count;
+
+    @JoinColumn(name = "payment_id", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Payment payment;
+
+
+    // Payment 추가
+    public void updatePayment(Payment payment) {
+        this.payment = payment;
+    }
+
 }
