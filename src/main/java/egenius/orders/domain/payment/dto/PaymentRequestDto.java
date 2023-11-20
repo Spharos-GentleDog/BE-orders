@@ -31,6 +31,8 @@ public class PaymentRequestDto {
 
     private Integer balanceAmount;
 
+    private Integer usedPoint;
+
     private List<ProductPaymentDto> productPaymentList;
 
 }

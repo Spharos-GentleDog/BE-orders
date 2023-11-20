@@ -26,6 +26,8 @@ public class PaymentInWebDto {
 
     private Integer balanceAmount;
 
+    private Integer usedPoint;
+
     // String을 LocalDateTime으로 변환해서 받아옴
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime requestedAt;

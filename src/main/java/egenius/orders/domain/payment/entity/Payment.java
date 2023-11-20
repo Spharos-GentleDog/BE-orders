@@ -49,7 +49,10 @@ public class Payment {
     @Column(name = "balance_amount", nullable = false)
     private Integer balanceAmount;
 
-    @OneToMany(mappedBy = "payment",fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @Column(name = "used_point", columnDefinition = "int default 0")
+    private Integer usedPoint;
+
+    @OneToMany(mappedBy = "payment", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductPayment> productPaymentList;
 
 
