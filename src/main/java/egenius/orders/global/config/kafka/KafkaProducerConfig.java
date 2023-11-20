@@ -31,7 +31,7 @@ public class KafkaProducerConfig {
 
     // Producer 생성 -> 매번 새로운 producer를 생성하는건 부하가 크기에 factory를 사용해서 같은 producer 인스턴스를 재사용
     @Bean
-    public ProducerFactory<String, Chunk> producerFactory() {
+    public ProducerFactory<String, Map> producerFactory() {
         Map<String, Object> configs = new HashMap<>();
         // BootStrap 서버주소
         configs.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
@@ -43,7 +43,7 @@ public class KafkaProducerConfig {
     }
 
     @Bean
-    public KafkaTemplate<String, Chunk> kafkaTemplate() {
+    public KafkaTemplate<String, Map> paymentTransferTemplate() {
         // 앞서 생성한 producerFactory를 인수로 넣음
         return new KafkaTemplate<>(producerFactory());
     }

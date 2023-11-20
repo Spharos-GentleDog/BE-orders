@@ -38,7 +38,7 @@ public class PaymentTransferJob {
     private final EntityManagerFactory enf;
     private final PlatformTransactionManager transactionManager;
     // kafka
-    private final KafkaTemplate<String, Chunk> kafkaTemplate;  // producer에서 message를 send 하기위한 카프카 템플릿
+    private final KafkaTemplate<String, Map> paymentTransferTemplate;  // producer에서 message를 send 하기위한 카프카 템플릿
     private final NewTopic paymentTopic; // 미리 bean 등록해둔 topic
 
 
@@ -146,8 +146,14 @@ public class PaymentTransferJob {
     @Bean
     public ItemWriter<Map> writer() {
         log.info("payment history send start!");
-        // chunk단위로 한번에 보낸다
+//        // chunk단위로 한번에 보낸다
+//        return chunk ->
+//            kafkaTemplate.send(paymentTopic.name(), chunk);
+        // chunk에서 item을 하나씩 뽑아서 전달한다 -> consumer쪽에서
         return chunk ->
-            kafkaTemplate.send(paymentTopic.name(), chunk);
+                chunk.forEach(item->{
+                    System.out.println("item = " + item);
+                    paymentTransferTemplate.send(paymentTopic.name(), item);
+                });
     }
 }
