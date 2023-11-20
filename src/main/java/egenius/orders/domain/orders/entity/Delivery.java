@@ -1,5 +1,7 @@
 package egenius.orders.domain.orders.entity;
 
+import egenius.orders.domain.orders.entity.converter.DeliveryStatusConverter;
+import egenius.orders.domain.orders.entity.enums.DeliveryStatus;
 import egenius.orders.global.common.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -19,8 +21,9 @@ public class Delivery extends BaseTimeEntity {
     @Column(name = "tracking_number", length = 20)
     private String trackingNumber;
 
-    @Column(name = "delivery_status", columnDefinition = "tinyint DEFAULT 0")
-    private Integer deliveryStatus;
+    @Convert(converter = DeliveryStatusConverter.class)
+    @Column(name = "delivery_status", columnDefinition = "tinyint")
+    private DeliveryStatus deliveryStatus;
 
     @Column(name = "recipient_name", length = 20, nullable = false)
     private String recipientName;
@@ -39,7 +42,7 @@ public class Delivery extends BaseTimeEntity {
 
 
     // 배송 상태 변경
-    public void updateDeliveryStatus(Integer deliveryStatus) {
+    public void updateDeliveryStatus(DeliveryStatus deliveryStatus) {
         this.deliveryStatus = deliveryStatus;
     }
 }
