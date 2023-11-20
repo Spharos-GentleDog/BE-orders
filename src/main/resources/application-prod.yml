@@ -10,6 +10,8 @@ spring:
   batch:
     jdbc:
       initialize-schema: always
+    job:
+      enabled: false
 
   # 카프카 접속정보 설정
   kafka:
