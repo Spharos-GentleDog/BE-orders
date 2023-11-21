@@ -6,6 +6,7 @@ import org.apache.kafka.common.config.TopicConfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.kafka.config.TopicBuilder;
 import org.springframework.kafka.core.KafkaAdmin;
 
 import java.util.HashMap;
@@ -28,16 +29,20 @@ public class KafkaAdminConfig {
     }
 
     // 토픽 생성 -> (토픽 이름, 할당할 파티션, replication 수) 를 입력하여 생성
+    // kafkaAdmin을 bean등록 해두었다면, topic을 bean등록 하는순간 Admin에서 자동으로 브로커에 토픽을 추가해준다
     @Bean
     public NewTopic paymentTopic() {
-        // 토픽 생성
-        NewTopic paymentTopic = new NewTopic("payment_data", 5, (short) 1);
         // 메시지 보관주기 설정 -> 20h = 7.2*10^6 ms
         Map<String, String> configs = new HashMap<>();
         configs.put(TopicConfig.RETENTION_MS_CONFIG, "72000000");
-        // 토픽return
-        paymentTopic = paymentTopic.configs(configs);
-        return paymentTopic;
+        // 토픽 생성
+        return TopicBuilder
+                .name("payment_topic")
+                .partitions(5)
+                .replicas(1)
+                .configs(configs)
+                .compact()
+                .build();
     }
 
 }
