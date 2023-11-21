@@ -38,7 +38,7 @@ public class KafkaAdminConfig {
         // 토픽 생성
         return TopicBuilder
                 .name("payment_topic")
-                .partitions(5)
+                .partitions(1)
                 .replicas(1)
                 .configs(configs)
                 .build();
