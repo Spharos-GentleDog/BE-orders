@@ -41,7 +41,6 @@ public class KafkaAdminConfig {
                 .partitions(5)
                 .replicas(1)
                 .configs(configs)
-                .compact()
                 .build();
     }
 
