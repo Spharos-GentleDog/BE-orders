@@ -82,6 +82,7 @@ public class PaymentTransferJob {
         // 자정이 넘어서 실행되므로 -> '시작 날짜' = '어제', '끝 날짜' = '오늘' 이 된다
         LocalDateTime start = LocalDate.now().minusDays(1).atStartOfDay();
         LocalDateTime end = LocalDate.now().atStartOfDay();
+        log.info("start,end : {}, {}",start,end);
 
         // 오늘의 상품별 결제 내역을 모두 가져옴
         QPayment qPayment = QPayment.payment;
