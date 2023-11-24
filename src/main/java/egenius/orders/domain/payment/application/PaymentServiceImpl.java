@@ -48,15 +48,11 @@ public class PaymentServiceImpl implements PaymentService{
 
         // modelMapper를 사용하여 entity 생성
         Payment payment = modelMapper.map(requestDto, Payment.class);
+        // 각 상품에 Payment를 추가
+        payment.getProductPaymentList().forEach(
+                product -> product.updatePayment(payment));
+        // payment와 productPayment를 같이 저장한다
         paymentRepository.save(payment);
-
-        // 상품 결제내역 저장
-        List<ProductPaymentDto> productList = requestDto.getProductPaymentList();
-        productList.forEach(product -> {
-            ProductPayment productPayment = modelMapper.map(product, ProductPayment.class);
-            productPayment.updatePayment(payment);
-            productPaymentRepository.save(productPayment);
-            });
     }
 
     // 2. 결제 키로 조회

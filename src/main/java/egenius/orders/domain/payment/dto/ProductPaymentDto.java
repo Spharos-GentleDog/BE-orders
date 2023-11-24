@@ -1,5 +1,6 @@
 package egenius.orders.domain.payment.dto;
 
+import egenius.orders.domain.payment.entity.Payment;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,4 +22,10 @@ public class ProductPaymentDto {
     private Integer productAmount;
 
     private Integer count;
+
+    private Payment payment;
+
+    public void updatePayment(Payment payment) {
+        this.payment = payment;
+    }
 }
