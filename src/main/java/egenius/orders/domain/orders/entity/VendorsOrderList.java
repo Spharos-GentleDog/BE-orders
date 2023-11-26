@@ -75,4 +75,8 @@ public class VendorsOrderList extends BaseTimeEntity {
     private Delivery delivery;
 
 
+    // 주문 내역 삭제
+    public void updateOrderDeleteStatus() {
+        this.orderDeleteStatus = 0;
+    }
 }

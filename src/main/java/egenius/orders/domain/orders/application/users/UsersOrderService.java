@@ -11,4 +11,7 @@ public interface UsersOrderService {
 
     // 주문 요약 조회
     VendorsOrderSearchOutResponseDto getOrdersSummary(String userEmail, Long groupId);
+
+    // 주문 삭제
+    void deleteOrder(String userEmail, String orderNumber);
 }

@@ -53,17 +53,12 @@ public class UsersOrderController {
         return new BaseResponse<>(vendorsOrderInfoOutWebDtos);
     }
 
+    @Operation(summary = "유저 주문 삭제", description = "유저 주문 삭제", tags = { "Orders User" })
+    @DeleteMapping("/{orderNumber}")
+    public BaseResponse<Void> deleteOrder(@RequestHeader("userEmail") String userEmail,
+                                          @PathVariable("orderNumber") String orderNumber) {
 
-
-//    @Operation(summary = "유저 주문 상세 조회", description = "유저 주문 상세 내역 무한스크롤 조회", tags = { "Orders" })
-//    @GetMapping("/detail")
-//    public BaseResponse<OrdersDetailListOutWebDto> getUserOrdersDetail(Pageable pageable,
-//                                    @RequestHeader("userEmail") String userEmail) {
-//
-//        OrdersListOutWebDto ordersListOutWebDto = ordersService.getUserOrders(pageable, userEmail);
-//        return new BaseResponse<>(OrdersDetailListOutWebDto);
-//
-//    }
-
-
+        usersOrderService.deleteOrder(userEmail, orderNumber);
+        return new BaseResponse<>();
+    }
 }
