@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface VendorsOrderListRepository extends JpaRepository<VendorsOrderList, Long>, VendorsOrderListRepositoryCustom {
     Boolean existsByOrderNumber(String orderNumber);
 
@@ -14,8 +16,8 @@ public interface VendorsOrderListRepository extends JpaRepository<VendorsOrderLi
             "limit 1")
     VendorsOrderList findMaxGroupId(@Param("userEmail") String userEmail);
 
-    VendorsOrderList findByUserEmail(String userEmail);
-
     VendorsOrderList findByIdLessThan(Long id);
+
+    List<VendorsOrderList> findByUserEmailAndOrderNumber(String userEmail, String orderNumber);
 
 }

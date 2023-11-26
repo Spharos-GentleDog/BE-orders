@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.ArrayList;
 import java.util.List;
 
+import static egenius.orders.domain.orders.entity.QDelivery.delivery;
 import static egenius.orders.domain.orders.entity.QVendorsOrderList.vendorsOrderList;
 
 @Slf4j
@@ -19,6 +20,7 @@ import static egenius.orders.domain.orders.entity.QVendorsOrderList.vendorsOrder
 public class VendorsOrderListRepositoryImpl implements VendorsOrderListRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
+    private final DeliveryRepository deliveryRepository;
     private final OrderDetailRepository orderDetailRepository;
 
     @Override
@@ -34,15 +36,17 @@ public class VendorsOrderListRepositoryImpl implements VendorsOrderListRepositor
                                 vendorsOrderList.brandLogoImageUrl,
                                 vendorsOrderList.vendorEmail,
                                 vendorsOrderList.createdAt,
-                                vendorsOrderList.totalPrice
+                                vendorsOrderList.totalPrice,
+                                vendorsOrderList.vendorsOrderListStatus
                         )
                 )
                 .from(vendorsOrderList)
+                .join(vendorsOrderList.delivery, delivery)
                 .where(
                         ltGroupId(groupId),
                         vendorsOrderList.userEmail.eq(userEmail),
-                        groupId != null ? vendorsOrderList.groupId.loe(groupId) : null
-//                        vendorsOrderList.orderDeleteStatus.eq(true)
+                        groupId != null ? vendorsOrderList.groupId.loe(groupId) : null,
+                        vendorsOrderList.orderDeleteStatus.eq(1)
                 )
                 .orderBy(vendorsOrderList.groupId.desc(), vendorsOrderList.id.desc())
                 .limit(10)
@@ -70,8 +74,9 @@ public class VendorsOrderListRepositoryImpl implements VendorsOrderListRepositor
                 orderDetailOutResponseDtoList.add(orderDetailOutResponseDto);
             });
             result.setOrderDetailList(orderDetailOutResponseDtoList);
-
             result.updateProductNameAndTotalCount();
+            result.updateVendorsOrderListStatusDescription();
+
         });
 
         return results;
