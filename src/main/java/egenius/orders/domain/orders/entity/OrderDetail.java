@@ -9,14 +9,17 @@ import lombok.*;
 @Entity
 @Getter
 @Builder(toBuilder = true)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString
 public class OrderDetail extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "vendors_order_list_id", referencedColumnName = "id")
+    private VendorsOrderList vendorsOrderList;
 
     @Column(name = "product_id", nullable = false)
     private Long productId;
@@ -43,9 +46,6 @@ public class OrderDetail extends BaseTimeEntity {
     @Column(name = "product_order_status", columnDefinition = "tinyint", nullable = false)
     private OrderDetailStatus productOrderStatus;
 
-    @Column(name = "product_delete_status", columnDefinition = "tinyint(1)", nullable = false)
-    private Integer productDeleteStatus;
-
     @Column(name = "product_discount_rate", nullable = false)
     private Integer productDiscountRate;
 
@@ -62,15 +62,16 @@ public class OrderDetail extends BaseTimeEntity {
     @JoinColumn(name = "refundAndExchange_id", referencedColumnName = "id")
     private RefundAndExchange refundAndExchange;
 
+
+
     // 상품 주문 상태 변경(주문 접수, 주문 완료, 주문 취소, 구매 확정, 교환, 배송)
     public void updateProductOrdersStatus(OrderDetailStatus productOrderStatus) {
         this.productOrderStatus = productOrderStatus;
     }
 
-    // 상품 상태 변경 (삭제 용)
-    public void updateProductStatus(Integer productDeleteStatus) {
-
-        this.productDeleteStatus = productDeleteStatus;
+    // 상품 VendorsOrderList 변경
+    public void updateVendorsOrderList(VendorsOrderList vendorsOrderList) {
+        this.vendorsOrderList = vendorsOrderList;
     }
 
 }

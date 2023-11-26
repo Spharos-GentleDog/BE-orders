@@ -1,4 +1,4 @@
-package egenius.orders.domain.orders.dto.in;
+package egenius.orders.domain.orders.dto.in.vendors;
 
 import lombok.Getter;
 

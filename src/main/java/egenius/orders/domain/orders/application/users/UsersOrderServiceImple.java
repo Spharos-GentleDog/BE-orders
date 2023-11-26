@@ -1,12 +1,13 @@
-package egenius.orders.domain.orders.application.user;
+package egenius.orders.domain.orders.application.users;
 
-import egenius.orders.domain.orders.dto.in.OrderDetailInRequestDto;
-import egenius.orders.domain.orders.dto.in.OrderRegisterRequestDto;
-import egenius.orders.domain.orders.dto.in.VendorsOrderListInRequestDto;
-import egenius.orders.domain.orders.dto.out.OrdersSuccessResponseDto;
+import egenius.orders.domain.orders.dto.in.users.OrderDetailInRequestDto;
+import egenius.orders.domain.orders.dto.in.users.OrderRegisterRequestDto;
+import egenius.orders.domain.orders.dto.in.users.VendorsOrderListInRequestDto;
+import egenius.orders.domain.orders.dto.out.users.OrdersSuccessResponseDto;
+import egenius.orders.domain.orders.dto.out.users.VendorsOrderSearchOutResponseDto;
+import egenius.orders.domain.orders.dto.out.users.VendorsOrderSummaryOutResponseDto;
 import egenius.orders.domain.orders.entity.*;
 import egenius.orders.domain.orders.entity.enums.DeliveryStatus;
-import egenius.orders.domain.orders.entity.enums.OrderDetailStatus;
 import egenius.orders.domain.orders.entity.enums.VendorsOrderListStatus;
 import egenius.orders.domain.orders.infrastructure.DeliveryRepository;
 import egenius.orders.domain.orders.infrastructure.OrderDetailRepository;
@@ -26,7 +27,7 @@ import java.util.Random;
 @RequiredArgsConstructor
 @Slf4j
 @Transactional
-public class UserOrdersServiceImple implements UserOrdersService {
+public class UsersOrderServiceImple implements UsersOrderService {
 
     private final ModelMapper modelMapper;
     private final OrderDetailRepository orderDetailRepository;
@@ -66,6 +67,20 @@ public class UserOrdersServiceImple implements UserOrdersService {
             orderNumber = formattedDate + randomString;
         }
 
+        // 최신 그룹 ID 조회
+        VendorsOrderList vendorsOrderList = vendorsOrderListRepository.findMaxGroupId(userEmail);
+        Long groupId;
+
+        // VendorsOrderList에 주문 내역이 있는지 확인
+        if (vendorsOrderList == null) {
+            groupId = 1L;
+        } else if (vendorsOrderList.getCreatedAt().toLocalDate().equals(currentDate)) {
+            groupId = vendorsOrderList.getGroupId();
+
+        } else {
+            groupId = vendorsOrderList.getGroupId()+1;
+        }
+
         // 배송지 테이블 생성
         Delivery delivery = modelMapper.map(orderRegisterRequestDto.getDeliveryOrdersInRequestDto(), Delivery.class);
         delivery = delivery.toBuilder()
@@ -76,8 +91,9 @@ public class UserOrdersServiceImple implements UserOrdersService {
 
         for(VendorsOrderListInRequestDto vendorsOrderListInRequestDto:
                 orderRegisterRequestDto.getVendorsOrderListInRequestDto()) {
-
+            log.info("vendorsOrderListInRequestDto getusername: {}", vendorsOrderListInRequestDto.getUserName());
             List<OrderDetailInRequestDto> orderDetailInRequestDtoList = vendorsOrderListInRequestDto.getOrderDetailList();
+
             // 주문 상세 테이블 생성
             List<OrderDetail> orderDetails = new ArrayList<>();
             orderDetailInRequestDtoList.forEach(item -> {
@@ -85,7 +101,6 @@ public class UserOrdersServiceImple implements UserOrdersService {
                 OrderDetail orderDetail = modelMapper.map(item, OrderDetail.class);
                 log.info("orderDetail : {}", orderDetail);
                 orderDetail = orderDetail.toBuilder()
-                        .productDeleteStatus(1)
                         .build();
                 orderDetailRepository.save(orderDetail);
                 orderDetails.add(orderDetail);
@@ -95,17 +110,27 @@ public class UserOrdersServiceImple implements UserOrdersService {
             // 벤더주문리스트 테이블 생성 후, 주문 상세 테이블을 업데이트하고 저장
 
             VendorsOrderList vendorsOrdersList = modelMapper.map(vendorsOrderListInRequestDto, VendorsOrderList.class);
-            log.info("vendorsOrdersList : {}", vendorsOrdersList);
+
+            log.info("vendorsOrdersList : {}", vendorsOrdersList.getUserName());
             vendorsOrdersList = vendorsOrdersList.toBuilder()
-                    .userName(userEmail)
+                    .groupId(groupId)
+                    .userEmail(userEmail)
                     .orderNumber(orderNumber)
                     .orderType(1)
                     .vendorsOrderListStatus(VendorsOrderListStatus.READY)
                     .delivery(delivery)
                     .orderDetailList(orderDetails)
+                    .orderDeleteStatus(1)
                     .build();
-            log.info("vendorsOrdersList : {}", vendorsOrdersList);
+
+            log.info("vendorsOrdersList : {}", vendorsOrdersList.getUserName());
             vendorsOrderListRepository.save(vendorsOrdersList);
+
+            // 주문 상세 테이블에 벤더주문리스트 테이블을 업데이트
+            for (OrderDetail item : orderDetails) {
+                item.updateVendorsOrderList(vendorsOrdersList);
+                orderDetailRepository.save(item);
+            }
         }
 
         return OrdersSuccessResponseDto.builder()
@@ -113,9 +138,29 @@ public class UserOrdersServiceImple implements UserOrdersService {
                 .build();
     }
 
-//    // 주문 요약 조회
-//    @Override
-//    public Slice<OrdersSummaryOutResponseDto> getOrdersSummary(Long ordersId, String userEmail, Pageable pageable) {
-//        return ordersDetailRepository.findByFilter(ordersId, userEmail, pageable);
-//    }
+    // 주문 요약 조회
+    @Override
+    public VendorsOrderSearchOutResponseDto getOrdersSummary(String userEmail, Long groupId) {
+        List<VendorsOrderSummaryOutResponseDto> vendorsOrderSummaryOutResponseDto =
+                vendorsOrderListRepository.findByFilter(userEmail, groupId);
+
+        // vendorsOrderSummaryOutResponseDto의 길이가 10 이하라면 hasNext는 false로 전달 (더 이상 조회할 주문이 없음)
+        Boolean hasNext = vendorsOrderSummaryOutResponseDto.size() > 10;
+
+        // vendorsOrderSummaryOutResponseDto 리스의 마지막 요소의 groupId보다 작은 값을 찾아서 nextGroupId 전달
+        VendorsOrderSummaryOutResponseDto lastElement =
+                vendorsOrderSummaryOutResponseDto.get(vendorsOrderSummaryOutResponseDto.size() - 1);
+
+        VendorsOrderList vendorsOrderList = vendorsOrderListRepository.findByIdLessThan(lastElement.getGroupId());
+
+        // vendorsOrderList가 null이라면 nextGroupId는 null로 전달
+        Long nextGroupId = vendorsOrderList == null ? null : vendorsOrderList.getGroupId();
+
+        // vendorsOrderSummaryOutResponseDto의 마지막 요소의 cursorId를 nextCursorId로 전달
+        return VendorsOrderSearchOutResponseDto.builder()
+                .vendorsOrderSummaryOutResponseDtoList(vendorsOrderSummaryOutResponseDto)
+                .hasNext(hasNext)
+                .nextGroupId(nextGroupId)
+                .build();
+    }
 }

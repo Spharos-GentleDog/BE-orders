@@ -35,8 +35,6 @@ public class QOrderDetail extends EntityPathBase<OrderDetail> {
 
     public final StringPath productColor = createString("productColor");
 
-    public final NumberPath<Integer> productDeleteStatus = createNumber("productDeleteStatus", Integer.class);
-
     public final NumberPath<Long> productDetailId = createNumber("productDetailId", Long.class);
 
     public final NumberPath<Integer> productDiscountRate = createNumber("productDiscountRate", Integer.class);
@@ -60,6 +58,8 @@ public class QOrderDetail extends EntityPathBase<OrderDetail> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
 
+    public final QVendorsOrderList vendorsOrderList;
+
     public QOrderDetail(String variable) {
         this(OrderDetail.class, forVariable(variable), INITS);
     }
@@ -79,6 +79,7 @@ public class QOrderDetail extends EntityPathBase<OrderDetail> {
     public QOrderDetail(Class<? extends OrderDetail> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.refundAndExchange = inits.isInitialized("refundAndExchange") ? new QRefundAndExchange(forProperty("refundAndExchange")) : null;
+        this.vendorsOrderList = inits.isInitialized("vendorsOrderList") ? new QVendorsOrderList(forProperty("vendorsOrderList"), inits.get("vendorsOrderList")) : null;
     }
 
 }

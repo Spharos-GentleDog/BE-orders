@@ -37,7 +37,11 @@ public class QVendorsOrderList extends EntityPathBase<VendorsOrderList> {
 
     public final NumberPath<Long> dogId = createNumber("dogId", Long.class);
 
+    public final NumberPath<Long> groupId = createNumber("groupId", Long.class);
+
     public final NumberPath<Long> id = createNumber("id", Long.class);
+
+    public final NumberPath<Integer> orderDeleteStatus = createNumber("orderDeleteStatus", Integer.class);
 
     public final ListPath<OrderDetail, QOrderDetail> orderDetailList = this.<OrderDetail, QOrderDetail>createList("orderDetailList", OrderDetail.class, QOrderDetail.class, PathInits.DIRECT2);
 

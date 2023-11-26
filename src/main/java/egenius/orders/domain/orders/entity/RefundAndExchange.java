@@ -8,9 +8,8 @@ import lombok.*;
 @Entity
 @Getter
 @Builder(toBuilder = true)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString
 public class RefundAndExchange {
 
     @Id

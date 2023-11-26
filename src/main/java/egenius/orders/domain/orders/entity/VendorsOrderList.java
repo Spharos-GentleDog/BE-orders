@@ -6,14 +6,14 @@ import egenius.orders.global.common.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
 @Builder(toBuilder = true)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString
 public class VendorsOrderList extends BaseTimeEntity {
 
     @Id
@@ -39,10 +39,10 @@ public class VendorsOrderList extends BaseTimeEntity {
     @Column(name = "vendors_order_list_status", columnDefinition = "tinyint", nullable = false)
     private VendorsOrderListStatus vendorsOrderListStatus;
 
-    @Column(name = "user_email", length = 30, nullable = false)
+    @Column(name = "user_email", length = 320)
     private String userEmail;
 
-    @Column(name = "user_name", length = 100, nullable = false)
+    @Column(name = "user_name", length = 20, nullable = false)
     private String userName;
 
     @Column(name = "user_phone_number", length = 20, nullable = false)
@@ -60,11 +60,17 @@ public class VendorsOrderList extends BaseTimeEntity {
     @Column(name = "total_price", nullable = false)
     private Integer totalPrice;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_detail_List", referencedColumnName = "id")
-    private List<OrderDetail> orderDetailList;
+    @Column(name = "delete_status", columnDefinition = "tinyint(1)", nullable = false)
+    private Integer orderDeleteStatus;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @Column(name = "group_id")
+    private Long groupId;
+
+    @Builder.Default
+    @OneToMany(mappedBy = "vendorsOrderList", cascade = CascadeType.ALL)
+    private List<OrderDetail> orderDetailList = new ArrayList<>();
+
+    @ManyToOne
     @JoinColumn(name = "delivery_orders_id", referencedColumnName = "id")
     private Delivery delivery;
 
