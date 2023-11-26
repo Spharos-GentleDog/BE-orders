@@ -41,7 +41,7 @@ public class UsersOrderController {
     }
 
     @Operation(summary = "유저 주문 조회", description = "유저 주문 무한스크롤 조회", tags = { "Orders User" })
-    @GetMapping("/summary")
+    @GetMapping("")
     public BaseResponse<VendorsOrderInfoOutWebDto> getOrdersSummary(@RequestHeader("userEmail") String userEmail,
                                                                     @RequestParam(value = "groupId", required = false)
                                                                            Long groupId
