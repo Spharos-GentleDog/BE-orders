@@ -1,4 +1,4 @@
-package egenius.orders.domain.orders.dto.out;
+package egenius.orders.domain.orders.dto.out.users;
 
 import lombok.Builder;
 import lombok.Getter;

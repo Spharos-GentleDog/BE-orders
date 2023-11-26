@@ -42,6 +42,8 @@ public class QPayment extends EntityPathBase<Payment> {
 
     public final DateTimePath<java.time.LocalDateTime> requestedAt = createDateTime("requestedAt", java.time.LocalDateTime.class);
 
+    public final NumberPath<Integer> usedPoint = createNumber("usedPoint", Integer.class);
+
     public QPayment(String variable) {
         super(Payment.class, forVariable(variable));
     }

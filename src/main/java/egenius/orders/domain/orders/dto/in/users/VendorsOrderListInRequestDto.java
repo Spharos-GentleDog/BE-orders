@@ -1,4 +1,4 @@
-package egenius.orders.domain.orders.dto.in;
+package egenius.orders.domain.orders.dto.in.users;
 
 import lombok.Getter;
 
@@ -10,7 +10,7 @@ public class VendorsOrderListInRequestDto {
     private String vendorEmail;
     private String brandName;
     private String brandLogoImageUrl;
-    private String userEmail;
+    private String userName;
     private String userPhoneNumber;
     private String ordersRequestMessage;
     private Integer ordersType;

@@ -1,7 +1,7 @@
-package egenius.orders.domain.orders.webdto.in;
+package egenius.orders.domain.orders.webdto.in.users;
 
-import egenius.orders.domain.orders.dto.in.DeliveryOrdersInRequestDto;
-import egenius.orders.domain.orders.dto.in.VendorsOrderListInRequestDto;
+import egenius.orders.domain.orders.dto.in.users.DeliveryOrdersInRequestDto;
+import egenius.orders.domain.orders.dto.in.users.VendorsOrderListInRequestDto;
 import lombok.Getter;
 
 import java.util.List;

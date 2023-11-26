@@ -1,4 +1,4 @@
-package egenius.orders.domain.orders.dto.in;
+package egenius.orders.domain.orders.dto.in.users;
 
 import egenius.orders.domain.orders.entity.enums.OrderDetailStatus;
 import lombok.Getter;
