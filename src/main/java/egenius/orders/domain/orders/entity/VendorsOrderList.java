@@ -4,6 +4,7 @@ import egenius.orders.domain.orders.entity.converter.VendorsOrderListStatusConve
 import egenius.orders.domain.orders.entity.enums.VendorsOrderListStatus;
 import egenius.orders.global.common.BaseTimeEntity;
 import jakarta.persistence.*;
+import jakarta.persistence.criteria.Fetch;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -31,9 +32,6 @@ public class VendorsOrderList extends BaseTimeEntity {
 
     @Column(name = "brand_logo_image_url", length = 100)
     private String brandLogoImageUrl;
-
-    @Column(name = "order_type", columnDefinition = "tinyint(1)", nullable = false)
-    private Integer orderType;
 
     @Convert(converter = VendorsOrderListStatusConverter.class)
     @Column(name = "vendors_order_list_status", columnDefinition = "tinyint", nullable = false)

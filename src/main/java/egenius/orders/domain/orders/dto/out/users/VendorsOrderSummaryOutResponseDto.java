@@ -12,6 +12,7 @@ import java.util.List;
 @Setter
 public class VendorsOrderSummaryOutResponseDto {
 
+    private Long vendorsOrderId;
     private Long groupId;
     private String orderNumber;
     private String brandName;

@@ -49,8 +49,6 @@ public class QVendorsOrderList extends EntityPathBase<VendorsOrderList> {
 
     public final StringPath ordersRequestMessage = createString("ordersRequestMessage");
 
-    public final NumberPath<Integer> orderType = createNumber("orderType", Integer.class);
-
     public final NumberPath<Integer> totalPrice = createNumber("totalPrice", Integer.class);
 
     //inherited

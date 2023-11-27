@@ -16,7 +16,13 @@ public interface VendorsOrderListRepository extends JpaRepository<VendorsOrderLi
             "limit 1")
     VendorsOrderList findMaxGroupId(@Param("userEmail") String userEmail);
 
-    VendorsOrderList findByIdLessThan(Long id);
+    @Query("select v from VendorsOrderList v " +
+            "where v.userEmail = :userEmail " +
+            "and v.groupId < :groupId " +
+            "order by v.groupId desc " +
+            "limit 1")
+    VendorsOrderList findByNextGroupId(@Param("userEmail") String userEmail,
+                                       @Param("groupId") Long groupId);
 
     List<VendorsOrderList> findByUserEmailAndOrderNumber(String userEmail, String orderNumber);
 

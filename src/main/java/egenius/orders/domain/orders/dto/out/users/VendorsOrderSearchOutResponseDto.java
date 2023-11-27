@@ -10,7 +10,6 @@ import java.util.List;
 public class VendorsOrderSearchOutResponseDto {
 
     private Long nextGroupId;
-    private Boolean hasNext;
     private List<VendorsOrderSummaryOutResponseDto> vendorsOrderSummaryOutResponseDtoList;
 
 }
