@@ -16,6 +16,7 @@ public class VendorsOrderSummaryOutResponseDto {
     private String orderNumber;
     private String brandName;
     private String brandLogoImageUrl;
+    private String productImageUrl;
     private String vendorEmail;
     private Integer totalPrice;
     private String productNameAndTotalCount;
@@ -29,6 +30,11 @@ public class VendorsOrderSummaryOutResponseDto {
     // vendorsOrderListStatusDescription 필드를 업데이트합니다.
     public void updateVendorsOrderListStatusDescription() {
         this.vendorsOrderListStatusDescription = this.vendorsOrderListStatus.getDescription();
+    }
+
+    // OrderDetailOutResponseDto에서 첫 번째 값 productImageUrl를 넣어준다.
+    public void updateProductImageUrl() {
+        this.productImageUrl = orderDetailList.get(0).getProductImageUrl();
     }
 
     // orderDetailList에서 첫 상품명과 List<OrderDetail>에서의 상품 수량을 합쳐서 productNameAndTotalCount 필드를 업데이트합니다.

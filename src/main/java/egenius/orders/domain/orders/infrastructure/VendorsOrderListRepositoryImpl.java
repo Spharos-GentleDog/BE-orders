@@ -74,6 +74,7 @@ public class VendorsOrderListRepositoryImpl implements VendorsOrderListRepositor
                 orderDetailOutResponseDtoList.add(orderDetailOutResponseDto);
             });
             result.setOrderDetailList(orderDetailOutResponseDtoList);
+            result.updateProductImageUrl();
             result.updateProductNameAndTotalCount();
             result.updateVendorsOrderListStatusDescription();
 
