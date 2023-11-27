@@ -54,7 +54,7 @@ public class UsersOrderController {
     }
 
     @Operation(summary = "유저 주문 삭제", description = "유저 주문 삭제", tags = { "Orders User" })
-    @DeleteMapping("/{orderNumber}")
+    @PutMapping("/{orderNumber}")
     public BaseResponse<Void> deleteOrder(@RequestHeader("userEmail") String userEmail,
                                           @PathVariable("orderNumber") String orderNumber) {
 

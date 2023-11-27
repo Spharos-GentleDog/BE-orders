@@ -62,8 +62,6 @@ public class OrderDetail extends BaseTimeEntity {
     @JoinColumn(name = "refundAndExchange_id", referencedColumnName = "id")
     private RefundAndExchange refundAndExchange;
 
-
-
     // 상품 주문 상태 변경(주문 접수, 주문 완료, 주문 취소, 구매 확정, 교환, 배송)
     public void updateProductOrdersStatus(OrderDetailStatus productOrderStatus) {
         this.productOrderStatus = productOrderStatus;
