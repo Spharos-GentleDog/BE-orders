@@ -117,7 +117,6 @@ public class UsersOrderServiceImple implements UsersOrderService {
                     .groupId(groupId)
                     .userEmail(userEmail)
                     .orderNumber(orderNumber)
-                    .orderType(1)
                     .vendorsOrderListStatus(VendorsOrderListStatus.READY)
                     .delivery(delivery)
                     .orderDetailList(orderDetails)
@@ -145,14 +144,11 @@ public class UsersOrderServiceImple implements UsersOrderService {
         List<VendorsOrderSummaryOutResponseDto> vendorsOrderSummaryOutResponseDto =
                 vendorsOrderListRepository.findByFilter(userEmail, groupId);
 
-        // vendorsOrderSummaryOutResponseDto의 길이가 10 이하라면 hasNext는 false로 전달 (더 이상 조회할 주문이 없음)
-        Boolean hasNext = vendorsOrderSummaryOutResponseDto.size() > 10;
+        // vendorsOrderSummaryOutResponseDto 에서 GroupId는 모두 같기때문에 첫 값에서 가져온다.
+        Long lastElement = vendorsOrderSummaryOutResponseDto.get(0).getGroupId();
 
-        // vendorsOrderSummaryOutResponseDto 리스의 마지막 요소의 groupId보다 작은 값을 찾아서 nextGroupId 전달
-        VendorsOrderSummaryOutResponseDto lastElement =
-                vendorsOrderSummaryOutResponseDto.get(vendorsOrderSummaryOutResponseDto.size() - 1);
-
-        VendorsOrderList vendorsOrderList = vendorsOrderListRepository.findByIdLessThan(lastElement.getGroupId());
+        VendorsOrderList vendorsOrderList = vendorsOrderListRepository.
+                findByNextGroupId(userEmail, lastElement);
 
         // vendorsOrderList가 null이라면 nextGroupId는 null로 전달
         Long nextGroupId = vendorsOrderList == null ? null : vendorsOrderList.getGroupId();
@@ -160,7 +156,6 @@ public class UsersOrderServiceImple implements UsersOrderService {
         // vendorsOrderSummaryOutResponseDto의 마지막 요소의 cursorId를 nextCursorId로 전달
         return VendorsOrderSearchOutResponseDto.builder()
                 .vendorsOrderSummaryOutResponseDtoList(vendorsOrderSummaryOutResponseDto)
-                .hasNext(hasNext)
                 .nextGroupId(nextGroupId)
                 .build();
     }

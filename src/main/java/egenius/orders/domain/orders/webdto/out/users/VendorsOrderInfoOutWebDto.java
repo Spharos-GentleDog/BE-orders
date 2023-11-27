@@ -9,7 +9,6 @@ import java.util.List;
 public class VendorsOrderInfoOutWebDto {
 
     private Long nextGroupId;
-    private Boolean hasNext;
     private List<VendorsOrderSummaryOutResponseDto> vendorsOrderSummaryOutResponseDtoList;
 
 }

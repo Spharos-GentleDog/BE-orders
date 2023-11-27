@@ -30,6 +30,7 @@ public class VendorsOrderListRepositoryImpl implements VendorsOrderListRepositor
                 .select(
                         Projections.fields(
                                 VendorsOrderSummaryOutResponseDto.class,
+                                vendorsOrderList.id.as("vendorsOrderId"),
                                 vendorsOrderList.groupId,
                                 vendorsOrderList.orderNumber,
                                 vendorsOrderList.brandName,
@@ -41,22 +42,17 @@ public class VendorsOrderListRepositoryImpl implements VendorsOrderListRepositor
                         )
                 )
                 .from(vendorsOrderList)
-                .join(vendorsOrderList.delivery, delivery)
                 .where(
-                        ltGroupId(groupId),
-                        vendorsOrderList.userEmail.eq(userEmail),
-                        groupId != null ? vendorsOrderList.groupId.loe(groupId) : null,
+                        ltGroupId(groupId, userEmail),
                         vendorsOrderList.orderDeleteStatus.eq(1)
                 )
-                .orderBy(vendorsOrderList.groupId.desc(), vendorsOrderList.id.desc())
-                .limit(10)
+                .orderBy(vendorsOrderList.id.desc())
                 .fetch();
 
-        log.info("results: {}", results);
         // 연관된 OrderDetail 엔터티를 가져와서 DTO에 설정 및 나머지 로직 처리
         results.forEach(result -> {
             // 하나씩 builder 패턴으로 생성해서 넣어줘야 함
-            List<OrderDetail> orderDetails = orderDetailRepository.findByVendorsOrderListId(result.getGroupId());
+            List<OrderDetail> orderDetails = orderDetailRepository.findByVendorsOrderListIdOrderByCreatedAtDesc(result.getVendorsOrderId());
             List<OrderDetailOutResponseDto> orderDetailOutResponseDtoList = new ArrayList<>();
             orderDetails.forEach(orderDetail -> {
                 OrderDetailOutResponseDto orderDetailOutResponseDto = OrderDetailOutResponseDto.builder()
@@ -91,9 +87,21 @@ public class VendorsOrderListRepositoryImpl implements VendorsOrderListRepositor
          *
          */
 
-    // groupId가 null이 아니면 groupId보다 작은 값들만 조회
-    private BooleanExpression ltGroupId(Long groupId){
-        return groupId == null ? null : vendorsOrderList.groupId.lt(groupId);
-    }
+    // groupId가 null이 아니면 groupId가 가장 큰 값을 조회 하고
+    // null이 아니라면 groupId가 가장 큰 값보다 작은 값 1개 조회
 
+    private BooleanExpression ltGroupId(Long groupId, String userEmail) {
+        // null 이면 가장 userEmail에서 groupId가 가장 큰 값 조회
+        if (groupId == null) {
+            return vendorsOrderList.groupId.eq(
+                    queryFactory
+                            .select(vendorsOrderList.groupId.max())
+                            .from(vendorsOrderList)
+                            .where(vendorsOrderList.userEmail.eq(userEmail))
+                            .fetchOne()
+            );
+        } else {
+            return vendorsOrderList.groupId.eq(groupId);
+        }
+    }
 }
