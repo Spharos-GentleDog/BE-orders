@@ -7,34 +7,22 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.*;
 import org.springframework.batch.core.launch.JobLauncher;
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.Map;
 
-@RestController
-@RequestMapping("/api/v1/orders/payment/batch")
+@Service
 @RequiredArgsConstructor
 @Slf4j
-public class BatchController {
-    // batch
+public class PaymentTransferJobLauncher {
     private final JobLauncher jobLauncher;
     private final Job paymentJob;
-    // service
 
-    /**
-     * Spring batch
-     * 1. 결제 내역 전송
-     */
-
-    //1. 결제 내역, 정산 서버로 전송
-    //todo: 스케쥴러로 작동하게 만들기
-    @GetMapping("")
+    @Scheduled(cron = "${spring.scheduler.daily_settlement_job_launcher.cron}",
+            zone = "${spring.scheduler.daily_settlement_job_launcher.zone}")
     public BaseResponse paymentDataTransferBatch() {
         Date today = Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
         // jobParams : job을 실행할때 넘겨주고싶은 파라미터 & job을 고유하게 식별하는 역할
@@ -57,6 +45,4 @@ public class BatchController {
         }
         return new BaseResponse();
     }
-
-
 }
