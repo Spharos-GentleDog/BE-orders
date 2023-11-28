@@ -13,7 +13,6 @@ public class VendorsOrderListInRequestDto {
     private String userName;
     private String userPhoneNumber;
     private String ordersRequestMessage;
-    private Integer ordersType;
     private Long dogId;
     private Integer deliveryFee;
     private Integer totalPrice;
