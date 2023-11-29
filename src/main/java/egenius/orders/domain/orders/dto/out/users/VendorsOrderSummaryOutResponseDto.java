@@ -40,8 +40,15 @@ public class VendorsOrderSummaryOutResponseDto {
 
     // orderDetailList에서 첫 상품명과 List<OrderDetail>에서의 상품 수량을 합쳐서 productNameAndTotalCount 필드를 업데이트합니다.
     public void updateProductNameAndTotalCount() {
-        this.productNameAndTotalCount =
-                orderDetailList.get(0).getProductName() + " 외 " + (orderDetailList.size() - 1) + "개";
+        // orderDetailList.size()가 1보다 크면 외 개수 표시 (ex. 외 2개)
+        if (orderDetailList.size() > 1) {
+            this.productNameAndTotalCount = orderDetailList.get(0).getProductName() + " 외 " +
+                    (orderDetailList.size() - 1) + "개";
+        } else {
+            this.productNameAndTotalCount = orderDetailList.get(0).getProductName();
+        }
+
+
     }
 
 }
