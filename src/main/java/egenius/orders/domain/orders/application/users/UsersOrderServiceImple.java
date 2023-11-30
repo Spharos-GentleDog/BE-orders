@@ -147,15 +147,15 @@ public class UsersOrderServiceImple implements UsersOrderService {
         // vendorsOrderSummaryOutResponseDto 에서 GroupId는 모두 같기때문에 첫 값에서 가져온다.
         Long lastElement = vendorsOrderSummaryOutResponseDto.get(0).getGroupId();
 
+        log.info("lastElement : {}", lastElement);
+        log.info("groupId : {}", groupId);
         VendorsOrderList vendorsOrderList = vendorsOrderListRepository.
                 findByNextGroupId(userEmail, lastElement);
 
-        if (vendorsOrderList != null) {
-            vendorsOrderList = vendorsOrderListRepository.findMaxGroupId(userEmail);
-        }
-
         // vendorsOrderList가 null이라면 nextGroupId는 null로 전달
         Long nextGroupId = vendorsOrderList == null ? null : vendorsOrderList.getGroupId();
+
+        log.info("nextGroupId : {}", nextGroupId);
 
         // vendorsOrderSummaryOutResponseDto의 마지막 요소의 cursorId를 nextCursorId로 전달
         return VendorsOrderSearchOutResponseDto.builder()
