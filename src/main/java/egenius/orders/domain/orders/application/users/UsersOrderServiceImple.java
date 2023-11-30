@@ -13,6 +13,7 @@ import egenius.orders.domain.orders.infrastructure.DeliveryRepository;
 import egenius.orders.domain.orders.infrastructure.OrderDetailRepository;
 import egenius.orders.domain.orders.infrastructure.VendorsOrderListRepository;
 import egenius.orders.global.common.exception.BaseException;
+import egenius.orders.global.common.response.BaseResponseStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -141,6 +142,11 @@ public class UsersOrderServiceImple implements UsersOrderService {
     // 주문 요약 조회
     @Override
     public VendorsOrderSearchOutResponseDto getOrdersSummary(String userEmail, Long groupId) {
+
+        if (!vendorsOrderListRepository.existsByUserEmail(userEmail)) {
+            throw new BaseException(BaseResponseStatus.NOT_EXIST_ORDER);
+        }
+
         List<VendorsOrderSummaryOutResponseDto> vendorsOrderSummaryOutResponseDto =
                 vendorsOrderListRepository.findByFilter(userEmail, groupId);
 

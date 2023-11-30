@@ -10,6 +10,8 @@ import java.util.List;
 public interface VendorsOrderListRepository extends JpaRepository<VendorsOrderList, Long>, VendorsOrderListRepositoryCustom {
     Boolean existsByOrderNumber(String orderNumber);
 
+    Boolean existsByUserEmail(String userEmail);
+
     @Query("select v from VendorsOrderList v " +
             "where v.userEmail = :userEmail " +
             "order by v.groupId desc " +
