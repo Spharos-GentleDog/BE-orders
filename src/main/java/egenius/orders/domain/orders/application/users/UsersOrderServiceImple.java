@@ -150,6 +150,10 @@ public class UsersOrderServiceImple implements UsersOrderService {
         VendorsOrderList vendorsOrderList = vendorsOrderListRepository.
                 findByNextGroupId(userEmail, lastElement);
 
+        if (vendorsOrderList != null) {
+            vendorsOrderList = vendorsOrderListRepository.findMaxGroupId(userEmail);
+        }
+
         // vendorsOrderList가 null이라면 nextGroupId는 null로 전달
         Long nextGroupId = vendorsOrderList == null ? null : vendorsOrderList.getGroupId();
 
